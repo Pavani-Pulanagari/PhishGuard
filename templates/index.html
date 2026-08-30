@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PhishGuard - Phishing URL Detector</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <div class="logo">🛡️</div>
+
+        <h1>PhishGuard</h1>
+
+        <p class="subtitle">
+            Phishing URL Detection & Risk Analysis
+        </p>
+
+    </header>
+
+
+    <div class="card">
+
+        <h2>🔍 Check a Website</h2>
+
+        <p>
+            Enter a URL below to analyze it for common phishing indicators.
+        </p>
+
+
+        <form method="POST">
+
+            <div class="form-group">
+
+                <input
+                    type="text"
+                    name="url"
+                    placeholder="https://example.com"
+                    required
+                >
+
+                <button type="submit">
+                    Check URL
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    {% if result %}
+
+    <div class="card">
+
+        <div class="result
+            {% if result.status == 'SAFE' %}
+                safe
+            {% elif result.status == 'SUSPICIOUS' %}
+                suspicious
+            {% else %}
+                phishing
+            {% endif %}
+        ">
+
+            <h2>
+                {% if result.status == 'SAFE' %}
+                    🟢 SAFE
+                {% elif result.status == 'SUSPICIOUS' %}
+                    🟡 SUSPICIOUS
+                {% else %}
+                    🔴 PHISHING
+                {% endif %}
+            </h2>
+
+
+            <div class="score">
+                Risk Score: {{ result.score }}/100
+            </div>
+
+
+            <p>
+                <strong>Analyzed URL:</strong>
+                {{ result.url }}
+            </p>
+
+
+            {% if result.reasons %}
+
+            <div class="reasons">
+
+                <h3>Detection Reasons</h3>
+
+                <ul>
+
+                    {% for reason in result.reasons %}
+
+                    <li>{{ reason }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% else %}
+
+            <div class="reasons">
+
+                <p>
+                    ✅ No major phishing indicators were detected.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="footer">
+
+        <p>
+            PhishGuard • Cybersecurity URL Analysis Tool
+        </p>
+
+        <p>
+            Educational project — results are risk assessments, not guarantees.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
